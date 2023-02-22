@@ -1,0 +1,159 @@
+1> Vectors:
+
+Problem statement:
+Build a circuit that has one 3-bit input, then outputs the same vector, and also splits it into three separate 1-bit outputs. 
+Connect output o0 to the input vector's position 0, o1 to position 1, etc.
+
+Code:
+module top_module ( 
+    input wire [2:0] vec,
+    output wire [2:0] outv,
+    output wire o2,
+    output wire o1,
+    output wire o0  );
+    assign outv[2]=vec[2];
+    assign outv[1]=vec[1];
+    assign outv[0]=vec[0];
+    assign o2=vec[2];
+    assign o1=vec[1];
+    assign o0=vec[0];
+
+endmodule
+
+
+2> Vectors in more detail:
+
+Problem statement:
+Build a combinational circuit that splits an input half-word (16 bits, [15:0] ) into lower [7:0] and upper [15:8] bytes.
+
+Code:
+`default_nettype none     // Disable implicit nets. Reduces some types of bugs.
+module top_module( 
+    input wire [15:0] in,
+    output wire [7:0] out_hi,
+    output wire [7:0] out_lo );
+    assign out_hi= in[15:8];
+    assign out_lo= in[7:0];
+endmodule 
+
+
+3> Vector part select:
+
+Problem statement:
+Build a circuit that will reverse the byte ordering of the 4-byte word.
+AaaaaaaaBbbbbbbbCcccccccDddddddd => DdddddddCcccccccBbbbbbbbAaaaaaa
+
+Code:
+module top_module( 
+    input [31:0] in,
+    output [31:0] out );
+assign out[31:24]= in[7:0];
+assign out[23:16] = in[15:8];
+assign out[15:8] = in[23:16];
+assign out[7:0] = in[31:24];
+endmodule
+
+4> Bitwise operators:
+
+Problem statement:
+Build a circuit that has two 3-bit inputs that computes the bitwise-OR of the two vectors, the logical-OR of the two vectors, and the inverse (NOT) of both vectors. 
+Place the inverse of b in the upper half of out_not (i.e., bits [5:3]), and the inverse of a in the lower half.
+
+Code:
+module top_module( 
+    input [2:0] a,
+    input [2:0] b,
+    output [2:0] out_or_bitwise,
+    output out_or_logical,
+    output [5:0] out_not
+);
+    assign out_or_bitwise= a| b;
+assign out_or_logical = a||b;
+    assign out_not[2:0] = ~a[2:0];
+assign out_not[5:3] = ~b[2:0];
+
+endmodule
+
+
+5>Four-input gates:
+
+Problem statement:
+Build a combinational circuit with four inputs, in[3:0].
+There are 3 outputs:
+out_and: output of a 4-input AND gate.
+out_or: output of a 4-input OR gate.
+out_xor: output of a 4-input XOR gate.
+
+Code:
+module top_module( 
+    input [3:0] in,
+    output out_and,
+    output out_or,
+    output out_xor
+);
+    assign  out_and= in[0] & in[1] &in[2] & in[3];
+    assign  out_or= in[0] | in[1] |in[2] | in[3];
+    assign  out_xor= in[0] ^ in[1] ^ in[2] ^ in[3];
+
+endmodule
+
+6>Vector concatenation operator:
+
+Problem statement:
+Given several input vectors, concatenate them together then split them up into several output vectors. There are six 5-bit input vectors: a, b, c, d, e, and f, for a total of 30 bits of input. 
+There are four 8-bit output vectors: w, x, y, and z, for 32 bits of output. The output should be a concatenation of the input vectors followed by two 1 bits:
+
+Code:
+module top_module (
+    input [4:0] a, b, c, d, e, f,
+    output [7:0] w, x, y, z );//
+    assign w= {a[4:0],b[4:2]};
+    assign x= {b[1:0],c[4:0],d[4]};
+    assign y= {d[3:0],e[4:1]};
+    assign z= {e[0],f[4:0],2'b11};
+endmodule
+
+7> Vector reversal 1:
+
+Problem statement:
+Given an 8-bit input vector [7:0], reverse its bit ordering.
+
+Code:
+module top_module( 
+    input [7:0] in,
+    output [7:0] out
+);
+    assign out[7:0]={in[0],in[1],in[2],in[3],in[4],in[5],in[6],in[7]};
+endmodule
+
+8> Replication operator:
+
+Problem statement:
+Build a circuit that sign-extends an 8-bit number to 32 bits. This requires a concatenation of 24 copies of the sign bit 
+(i.e., replicate bit[7] 24 times) followed by the 8-bit number itself.
+
+Code:
+module top_module (
+    input [7:0] in,
+    output [31:0] out );
+    assign out = {{24{in[7]}},{in}};
+endmodule
+
+
+9> More replication:
+
+Problem statement:
+Given five 1-bit signals (a, b, c, d, and e), compute all 25 pairwise one-bit comparisons in the 25-bit output vector. The output should be 1 if the two bits being compared are equal.
+
+out[24] = ~a ^ a;   // a == a, so out[24] is always 1.
+out[23] = ~a ^ b;
+out[22] = ~a ^ c;...
+
+Code:
+module top_module (
+    input a, b, c, d, e,
+    output [24:0] out );
+    // The output is XNOR of two vectors created by 
+    // concatenating and replicating the five inputs.
+    assign out[24:0] = {~{5{a}} ^ {a,b,c,d,e},~{5{b}} ^ {a,b,c,d,e},~{5{c}} ^ {a,b,c,d,e},~{5{d}} ^ {a,b,c,d,e},~{5{e}} ^ {a,b,c,d,e}};
+endmodule
