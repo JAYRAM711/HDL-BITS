@@ -1,0 +1,143 @@
+1. Output one:
+
+Problem Statement:
+Build a circuit with no inputs and one output. That output should always drive 1 (or logic high).
+
+Code:
+module top_module( output one );
+    assign one = 1'b1;
+endmodule
+
+
+2:Output zero:
+
+Problem Statement:
+Build a circuit with no inputs and one output that outputs a constant 0
+
+Code:
+module top_module(
+    output zero
+);
+assign zero = 1'b0;
+endmodule
+
+3.Wire:
+
+Problem statement:
+Create a module with one input and one output that behaves like a wire.
+
+Code:
+module top_module( input in, output out );
+assign out = in;
+endmodule
+
+4.Wire4:
+
+Problem statement:
+Create a module with 3 inputs and 4 outputs that behaves like wires that makes these connections:
+a -> w
+b -> x
+b -> y
+c -> z
+
+Code:
+module top_module( 
+    input a,b,c,
+    output w,x,y,z );
+assign w=a;
+    assign x=b;
+    assign y=b;
+    assign z=c;
+endmodule
+
+5. Not gate:
+
+Problem statement:
+Create a module that implements a NOT gate.
+
+Code:
+module top_module( input in, output out );
+assign out= ~in;
+endmodule
+
+6. And gate:
+
+Problem statement:
+Create a module that implements an AND gate.
+
+Code:
+module top_module( 
+    input a, 
+    input b, 
+    output out );
+assign out = a && b;
+endmodule
+
+7.Nor gate:
+
+Problem statement:
+Create a module that implements a NOR gate.
+
+Code:
+module top_module( 
+    input a, 
+    input b, 
+    output out );
+    assign out= ~(a||b);
+endmodule
+
+8. Xnor gate:
+
+Problem statement:
+Create a module that implements an XNOR gate.
+
+Code:
+module top_module( 
+    input a, 
+    input b, 
+    output out );
+    assign out=~(a^^b);
+endmodule
+
+9. Wire decl:
+
+Problem statement:
+Implement the following circuit. Create two intermediate wires (named anything you want) to connect the AND and OR gates together. Note that the wire that feeds the NOT gate is really wire out, so you do not necessarily need to declare a third wire here. Notice how wires are driven by exactly one source (output of a gate), but can feed multiple inputs.
+https://hdlbits.01xz.net/wiki/File:Wiredecl2.png
+
+Code:
+`default_nettype none
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out,
+    output out_n   ); 
+wire p,q,r;
+    assign p= a&&b;
+    assign q= c &&d;
+    assign r= p ||q;
+assign out=r;
+    assign out_n=~r;
+endmodule
+
+10: 7458:
+
+Problem statement:
+Create a module with the same functionality as the 7458 chip. It has 10 inputs and 2 outputs. You may choose to use an assign statement to drive each of the output wires, or you may choose to declare (four) wires for use as intermediate signals, where each internal wire is driven by the output of one of the AND gates. For extra practice, try it both ways.
+
+Code:
+module top_module ( 
+    input p1a, p1b, p1c, p1d, p1e, p1f,
+    output p1y,
+    input p2a, p2b, p2c, p2d,
+    output p2y );
+wire p,q,r,s;
+    assign p= p2a&&p2b;
+    assign q= p2c&&p2d;
+    assign r= p1a&&p1b&&p1c;
+    assign s= p1f&&p1e&&p1d;
+    assign p2y= p||q;
+    assign p1y= r||s;
+endmodule
