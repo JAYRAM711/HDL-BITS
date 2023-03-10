@@ -1,0 +1,135 @@
+1. Bugs mux2:
+
+
+Problem Statement:
+This 8-bit wide 2-to-1 multiplexer doesn't work. Fix the bug(s).
+
+Code:
+module top_module (
+    input sel,
+    input [7:0] a,
+    input [7:0] b,
+    output [7:0] out);
+
+    assign out = sel? a:b;
+
+endmodule
+
+
+2.Bugs nand3:
+
+Problem Statement:
+This three-input NAND gate doesn't work. Fix the bug(s).
+
+You must use the provided 5-input AND gate:
+
+module andgate ( output out, input a, input b, input c, input d, input e );
+
+Code:
+module top_module (input a, input b, input c, output out);//
+wire out_reg;
+    andgate inst1( out_reg, a, b, c,1,1);
+assign out=!out_reg;
+endmodule
+
+
+3.Bugs mux4:
+
+Problem Statement:
+This 4-to-1 multiplexer doesn't work. Fix the bug(s).
+
+You are provided with a bug-free 2-to-1 multiplexer:
+
+module mux2 (
+    input sel,
+    input [7:0] a,
+    input [7:0] b,
+    output [7:0] out
+);
+
+code:
+module top_module (
+    input [1:0] sel,
+    input [7:0] a,
+    input [7:0] b,
+    input [7:0] c,
+    input [7:0] d,
+    output [7:0] out  ); //
+
+    wire [7:0] mux0,mux1;
+    mux2 m0( sel[0],    a,    b, mux0 );
+    mux2 m1( sel[0],    c,    d, mux1 );
+    mux2 m2( sel[1], mux0, mux1,  out );
+
+endmodule
+
+
+4.Bugs addsubz:
+
+Problem Statement:
+The following adder-subtractor with zero flag doesn't work. Fix the bug(s).
+
+code:
+module top_module ( 
+    input do_sub,
+    input [7:0] a,
+    input [7:0] b,
+    output reg [7:0] out,
+    output reg result_is_zero
+);//
+
+    always @(*) begin
+        case (do_sub)
+          0: out = a+b;
+          1: out = a-b;
+        endcase
+result_is_zero = 1'b0;
+        if (out==0)
+            begin
+            result_is_zero = 1'b1;
+            end
+    end
+
+endmodule
+
+
+5.Bugs case:
+
+Problem Statement:
+This combinational circuit is supposed to recognize 8-bit keyboard scancodes for keys 0 through 9. It should indicate whether one of the 10 cases were recognized (valid), and if so, which key was detected. Fix the bug(s).
+
+code:
+module top_module (
+    input [7:0] code,
+    output reg [3:0] out,
+    output reg valid);//
+
+    always @(*) begin
+        case (code)
+            8'h45: out = 0;
+            8'h16: out = 1;
+            8'h1e: out = 2;
+            8'h26: out = 3;
+            8'h25: out = 4;
+            8'h2e: out = 5;
+            8'h36: out = 6;
+            8'h3d: out = 7;
+            8'h3e: out = 8;
+            8'h46: out = 9;
+            default: out= 0;
+        endcase
+
+    
+        if(code==8'h45) begin
+        valid=1;
+    end
+        else if(out==0) begin
+        valid=0;
+    end
+    else 
+        begin
+        valid=1;
+    end
+
+    end
+endmodule
