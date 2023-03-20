@@ -1,0 +1,235 @@
+Build a circuit from a simulation waveform:
+
+Combinational circuit 1:
+
+Problem Statement:
+This is a combinational circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input a,
+    input b,
+    output q );//
+
+    assign q = a &b;
+
+endmodule
+
+
+Combinational circuit 2:
+
+Problem Statement:
+This is a combinational circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output q );//
+
+    assign q = ~(a^b^c^d);
+
+endmodule
+
+
+
+Combinational circuit 3:
+
+Problem Statement:
+This is a combinational circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+
+code:
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output q );//
+    
+    assign q=(b|a)&(d|c);
+    
+endmodule
+
+
+
+Combinational circuit 4:
+
+Problem Statement:
+This is a combinational circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output q );//
+
+    assign q = (b|c); 
+
+endmodule
+
+
+Combinational circuit 5:
+
+Problem Statement:
+This is a combinational circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input [3:0] a,
+    input [3:0] b,
+    input [3:0] c,
+    input [3:0] d,
+    input [3:0] e,
+    output reg [3:0] q );
+    always@(*)
+        begin
+            if(c==0) begin
+                q=b; end
+            else if (c==1) begin
+                q=e; end
+            else if (c==2) begin
+                q=a; end  
+            else if (c==3) begin
+                q=d; end
+            else begin
+                q=4'b1111; end
+        end
+            
+endmodule
+
+
+Combinational circuit 6:
+
+Problem Statement:
+This is a combinational circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input [2:0] a,
+    output reg [15:0] q ); 
+    always@(*)
+        begin
+            case(a)
+                1'd0: q=16'h1232;
+                1'd1: q=16'haee0;
+                2'd2: q=16'h27d4;
+                2'd3: q=16'h5a0e;
+                3'd4: q=16'h2066;
+                3'd5: q=16'h64ce;
+                3'd6: q=16'hc526;
+                3'd7: q=16'h2f19;
+            endcase
+        end
+endmodule
+
+
+Sequential circuit 7:
+
+Problem Statement:
+This is a Sequential circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input clk,
+    input a,
+    output reg q );
+    always@(posedge clk)
+        begin
+            if(clk==1) begin
+                if(a==0) begin
+                    q=1'b1; end
+                else if(a==1) begin
+                    q=1'b0; end
+            end
+        end
+endmodule
+
+
+Sequential circuit 8:
+
+Problem Statement:
+This is a Sequential circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input clock,
+    input a,
+    output p,
+    output reg q );
+    always@(*)
+        begin
+            if(clock==1) begin
+                if(a==0) begin
+                p=1'b0; end
+                else if(a==1) begin
+                p=1'b1; end
+            end
+    end
+    always@(negedge clock)
+        begin
+            if (clock==0) begin
+                if(a==0) begin
+                    q=1'b0; end
+                else if(a==1) begin
+                    q=1'b1; end
+            end
+        end
+endmodule
+
+
+Sequential circuit 9:
+
+Problem Statement:
+This is a Sequential circuit. Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input clk,
+    input a,
+    output reg [3:0] q );
+    always@(posedge clk)
+        begin
+            if(a==1) begin 
+                q<=3'd4; end
+            else if(q==6) begin
+                q<=3'd0; end
+            else begin
+                q=q+1; end
+        end
+                   
+endmodule
+
+
+Sequential circuit 10:
+
+Problem Statement:
+This is a sequential circuit. The circuit consists of combinational logic and one bit of memory (i.e., one flip-flop). The output of the flip-flop has been made observable through the output state.
+
+Read the simulation waveforms to determine what the circuit does, then implement it.
+
+code:
+module top_module (
+    input clk,
+    input a,
+    input b,
+    output q,
+    output state  );
+
+    always@(posedge clk)
+    begin
+        if(a==b) begin
+            state<=a;
+        end
+    end
+    
+    always@(*)
+        begin
+            q<=~a & b & ~state| a & ~b & ~state| ~a & ~b & state| a & b & state;
+        end
+    
+endmodule
